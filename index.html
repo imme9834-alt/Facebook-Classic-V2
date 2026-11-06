@@ -4,481 +4,1706 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#3b5998">
-<title>Facebook Classic</title>
-
+<title>Facebook - Connect with friends</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
 :root {
-  --blue: #3b5998;
-  --dark-blue: #29447e;
-  --border: #c3cfe0;
-  --text: #333;
+  --fb-blue: #3b5998;
+  --fb-dark: #29487d;
+  --fb-link: #3b5998;
+  --fb-border: #d3d6db;
+  --fb-bg: #e9ebee;
+  --fb-text: #1d2129;
+  --fb-muted: #90949c;
+  --fb-card: #fff;
 }
 
 * { box-sizing: border-box; }
 
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #edf0f5;
-  color: var(--text);
+html {
+  background: var(--fb-bg);
+  scroll-behavior: smooth;
 }
 
+body {
+  margin: 0;
+  background: var(--fb-bg);
+  color: var(--fb-text);
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+
+button, input, textarea {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+button { cursor: pointer; }
+
+a {
+  color: var(--fb-link);
+  text-decoration: none;
+}
+
+a:hover { text-decoration: underline; }
+
+#app {
+  min-height: 100vh;
+}
+
+/* 2015 BLUE HEADER */
+
 .topbar {
-  background: linear-gradient(#627aad, #3b5998);
-  border-bottom: 1px solid #243d70;
+  height: 43px;
+  background: var(--fb-blue);
+  border-bottom: 1px solid #29487d;
+  position: sticky;
+  top: 0;
+  z-index: 100;
   color: white;
-  padding: 13px 16px;
-  box-shadow: 0 1px 3px #777;
 }
 
 .topbar-inner {
-  max-width: 980px;
+  max-width: 1012px;
+  height: 43px;
   margin: auto;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 9px;
+  padding: 0 8px;
 }
 
-.logo {
-  font-size: 31px;
-  font-weight: bold;
-  letter-spacing: -1.8px;
+.fb-logo {
   color: white;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 29px;
+  letter-spacing: -2px;
+  line-height: 35px;
+  width: 32px;
+  flex-shrink: 0;
 }
 
-.logo span {
+.search-box {
+  display: flex;
+  height: 26px;
+  flex: 1;
+  max-width: 395px;
+}
+
+.search-box input {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #29487d;
+  border-radius: 2px 0 0 2px;
+  padding: 4px 8px;
+  font-size: 13px;
+  outline: none;
+}
+
+.search-box button {
+  width: 46px;
+  background: #f5f6f7;
+  border: 1px solid #29487d;
+  border-left: 0;
+  color: #333;
+  font-size: 14px;
+}
+
+.header-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  height: 100%;
+  white-space: nowrap;
+}
+
+.header-links button {
+  color: white;
+  background: transparent;
+  border: 0;
   font-size: 12px;
-  letter-spacing: 0;
-  vertical-align: top;
+  font-weight: bold;
+  padding: 7px 5px;
 }
 
-.version {
-  font-size: 11px;
-  color: #e4e9f2;
+.header-links button:hover {
+  background: #29487d;
 }
 
-.container {
-  max-width: 960px;
-  margin: 32px auto;
-  padding: 0 15px;
+.header-icon {
+  font-size: 17px !important;
+  padding: 5px !important;
 }
 
-.main-card {
-  background: white;
-  border: 1px solid #ccd4e0;
-  border-radius: 3px;
-  padding: 28px;
-  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+.header-divider {
+  height: 18px;
+  border-left: 1px solid #29487d;
 }
 
-.columns {
+/* PAGE LAYOUT */
+
+.page {
+  max-width: 1012px;
+  margin: 12px auto;
+  padding: 0 8px;
   display: grid;
-  grid-template-columns: 1.2fr .8fr;
-  gap: 35px;
+  grid-template-columns: 180px minmax(0, 1fr) 275px;
+  gap: 12px;
+  align-items: start;
 }
 
-h1 {
-  color: #203b70;
-  font-size: 26px;
+.left-column,
+.right-column {
+  min-width: 0;
+}
+
+.center-column {
+  min-width: 0;
+}
+
+/* LEFT SIDEBAR */
+
+.sidebar-section {
+  margin-bottom: 15px;
+}
+
+.sidebar-heading {
+  color: #616770;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 7px 5px;
+  text-transform: uppercase;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 7px;
+  color: #1d2129;
+  border-radius: 2px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.sidebar-item:hover {
+  background: #dfe2e8;
+  text-decoration: none;
+}
+
+.sidebar-item.active {
+  background: #fff;
+  border: 1px solid #d3d6db;
+  font-weight: bold;
+}
+
+.sidebar-icon {
+  width: 20px;
+  text-align: center;
+  font-size: 15px;
+}
+
+.mini-profile {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 2px;
+  margin-bottom: 7px;
+}
+
+.mini-profile:hover { background: #dfe2e8; }
+
+.mini-profile img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+}
+
+.mini-profile strong { font-size: 12px; }
+
+/* COMMON CARDS */
+
+.card {
+  background: var(--fb-card);
+  border: 1px solid var(--fb-border);
+  border-radius: 2px;
+  margin-bottom: 12px;
+}
+
+.card-header {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e5e5e5;
+  font-weight: bold;
+  color: #4b4f56;
+  font-size: 13px;
+}
+
+.card-body { padding: 12px; }
+
+.muted {
+  color: var(--fb-muted);
+  font-size: 11px;
+}
+
+.section-title {
+  font-size: 17px;
+  font-weight: normal;
+  color: #4b4f56;
   margin: 4px 0 12px;
 }
 
-h2 {
-  color: #333;
-  font-size: 19px;
-  margin-top: 0;
-}
+/* COMPOSER */
 
-.intro {
-  font-size: 15px;
-  line-height: 1.7;
-  color: #555;
-}
-
-.old-notice {
-  margin-top: 24px;
-  padding: 13px;
-  background: #f7f9fc;
-  border: 1px solid #d8dfea;
-  color: #555;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.account-box {
-  background: #f7f9fc;
-  border: 1px solid #d8dfea;
-  padding: 20px;
-  border-radius: 3px;
-}
-
-.account-box h2 {
-  color: #203b70;
-  border-bottom: 1px solid #d8dfea;
-  padding-bottom: 12px;
-}
-
-.btn {
-  display: block;
-  width: 100%;
-  text-align: center;
-  padding: 12px;
-  border-radius: 4px;
-  text-decoration: none;
-  font-size: 15px;
-  font-weight: bold;
-  margin-top: 12px;
-  cursor: pointer;
-  border: 1px solid transparent;
-}
-
-.create-btn {
-  background: linear-gradient(#6e9b45, #56802e);
-  border-color: #3b6e22;
-  color: white;
-}
-
-.create-btn:hover { background: #4d762b; }
-
-.login-btn {
-  background: linear-gradient(#6d87b5, #3b5998);
-  border-color: #29447e;
-  color: white;
-}
-
-.login-btn:hover { background: #29447e; }
-
-hr {
-  border: 0;
-  border-top: 1px solid #d8dfea;
-  margin: 20px 0;
-}
-
-.footer {
-  max-width: 960px;
-  margin: 18px auto 30px;
-  padding: 0 15px;
-  color: #777;
-  font-size: 11px;
-  line-height: 1.8;
-}
-
-.footer a {
+.composer-tabs {
+  display: flex;
+  background: #f6f7f9;
+  border-bottom: 1px solid #dddfe2;
+  padding: 8px 10px;
+  gap: 15px;
   color: #3b5998;
-  text-decoration: none;
+  font-weight: bold;
+  font-size: 12px;
 }
 
-.admin-trigger {
-  position: fixed;
-  right: 13px;
-  bottom: 13px;
-  border: 1px solid #29447e;
-  border-radius: 50%;
-  width: 42px;
-  height: 42px;
-  background: #3b5998;
-  color: white;
-  font-size: 19px;
-  cursor: pointer;
-  box-shadow: 0 2px 7px #888;
-  display: none;
+.composer-tabs span { cursor: pointer; }
+
+.composer-main {
+  display: flex;
+  gap: 9px;
+  padding: 12px;
 }
 
-.admin-panel {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 10;
-  background: rgba(0,0,0,.55);
-  padding: 18px;
-  align-items: center;
-  justify-content: center;
+.composer-avatar {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
 }
 
-.admin-card {
-  background: white;
-  border: 1px solid #9baac4;
-  border-radius: 4px;
-  padding: 20px;
-  width: 100%;
-  max-width: 360px;
-  box-shadow: 0 4px 20px #333;
+.composer-main textarea {
+  border: 0;
+  resize: vertical;
+  min-height: 45px;
+  flex: 1;
+  outline: none;
+  font-size: 14px;
+  padding: 8px 0;
 }
 
-.admin-heading {
+.composer-bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #d8dfea;
-  padding-bottom: 12px;
+  padding: 9px 12px;
+  border-top: 1px solid #e9ebee;
 }
 
-.admin-heading h2 {
-  margin: 0;
-  color: #29447e;
+.composer-tools {
+  display: flex;
+  gap: 12px;
+  color: #7f7f7f;
+  font-size: 12px;
 }
 
-.top-reset {
-  background: #a83232;
+.primary-btn {
+  background: #4267b2;
+  border: 1px solid #365899;
+  border-radius: 2px;
   color: white;
-  border: 1px solid #812222;
-  border-radius: 3px;
-  padding: 7px 10px;
+  padding: 6px 16px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.primary-btn:hover { background: #365899; }
+
+/* POSTS */
+
+.post {
+  background: white;
+  border: 1px solid var(--fb-border);
+  margin-bottom: 12px;
+}
+
+.post-header {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  gap: 9px;
+}
+
+.post-avatar {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.post-author {
+  color: #365899;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.post-time {
+  display: block;
+  color: #90949c;
   font-size: 11px;
+  margin-top: 4px;
+}
+
+.post-content {
+  padding: 0 12px 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.post-photo {
+  width: 100%;
+  max-height: 430px;
+  object-fit: cover;
+  display: block;
+}
+
+.post-stats {
+  padding: 9px 12px;
+  color: #90949c;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 12px;
+}
+
+.post-actions {
+  display: flex;
+  padding: 4px 8px;
+}
+
+.post-actions button {
+  flex: 1;
+  padding: 8px 3px;
+  background: white;
+  border: 0;
+  color: #606770;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.post-actions button:hover {
+  background: #f2f3f5;
+}
+
+.post-actions button.liked {
+  color: #4267b2;
+}
+
+.comment-area {
+  padding: 9px 12px;
+  background: #f6f7f9;
+  border-top: 1px solid #e5e5e5;
+}
+
+.comment-area input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #dddfe2;
+  border-radius: 20px;
+  outline: none;
+  font-size: 12px;
+}
+
+/* RIGHT SIDEBAR */
+
+.right-card {
+  background: white;
+  border: 1px solid var(--fb-border);
+  margin-bottom: 12px;
+}
+
+.right-heading {
+  padding: 10px;
+  color: #616770;
+  font-weight: bold;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 12px;
+}
+
+.right-content { padding: 10px; }
+
+.friend-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 11px;
+}
+
+.friend-row:last-child { margin-bottom: 0; }
+
+.friend-row img {
+  width: 38px;
+  height: 38px;
+  object-fit: cover;
+}
+
+.friend-row strong {
+  color: #365899;
+  font-size: 12px;
+}
+
+.friend-row small {
+  display: block;
+  color: #90949c;
+  margin-top: 4px;
+}
+
+.online-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: #42b72a;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+
+.sponsored {
+  color: #90949c;
+  font-size: 10px;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+}
+
+/* PROFILE */
+
+.cover-photo {
+  height: 190px;
+  background: linear-gradient(120deg, #536d9e, #9cb2cf);
+  position: relative;
+  border-bottom: 1px solid #ddd;
+}
+
+.cover-title {
+  position: absolute;
+  bottom: 14px;
+  left: 180px;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 0 1px 3px #333;
+}
+
+.profile-picture {
+  width: 150px;
+  height: 150px;
+  position: absolute;
+  bottom: -35px;
+  left: 18px;
+  border: 4px solid white;
+  object-fit: cover;
+  background: white;
+}
+
+.profile-nav {
+  display: flex;
+  padding: 12px 10px 12px 180px;
+  gap: 18px;
+  background: white;
+  flex-wrap: wrap;
+}
+
+.profile-nav button {
+  border: 0;
+  background: white;
+  color: #365899;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+/* FRIENDS AND PHOTOS */
+
+.people-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.person-card {
+  border: 1px solid #dddfe2;
+  background: white;
+  padding-bottom: 10px;
+}
+
+.person-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.person-card strong {
+  display: block;
+  padding: 7px 6px 2px;
+  color: #365899;
+  font-size: 12px;
+}
+
+.person-card button {
+  margin: 5px 6px 0;
+  padding: 5px 8px;
+  background: #f5f6f7;
+  border: 1px solid #ccd0d5;
+  color: #4b4f56;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+}
+
+.photo-grid img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+/* MESSAGES */
+
+.message-row {
+  display: flex;
+  gap: 9px;
+  padding: 10px;
+  border-bottom: 1px solid #e5e5e5;
   cursor: pointer;
 }
 
-.admin-action {
-  width: 100%;
-  padding: 11px;
-  margin-top: 12px;
+.message-row:hover { background: #f6f7f9; }
+
+.message-row img {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+}
+
+.message-row strong {
+  color: #365899;
+  font-size: 12px;
+}
+
+.message-row p {
+  margin: 5px 0 0;
+  color: #777;
+  font-size: 12px;
+}
+
+/* NOTIFICATIONS */
+
+.notification {
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  border-bottom: 1px solid #e5e5e5;
+  background: #edf2fa;
+}
+
+.notification img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+/* GROUPS AND EVENTS */
+
+.group-row {
+  padding: 12px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.group-row strong {
+  color: #365899;
+}
+
+.group-row p {
+  color: #777;
+  margin: 5px 0;
+}
+
+/* PAGE FOOTER */
+
+.page-footer {
+  color: #90949c;
+  font-size: 11px;
+  line-height: 1.8;
+  padding: 10px 0 25px;
+}
+
+.page-footer a { margin-right: 8px; }
+
+/* PAGE SWITCHING */
+
+.view { display: none; }
+.view.active { display: block; }
+
+.empty-state {
+  padding: 35px 15px;
+  text-align: center;
+  color: #777;
+  background: white;
+  border: 1px solid var(--fb-border);
+}
+
+/* ADMIN */
+
+.admin-trigger {
+  position: fixed;
+  bottom: 14px;
+  right: 14px;
+  width: 42px;
+  height: 42px;
+  display: none;
+  border: 1px solid #29487d;
   background: #3b5998;
   color: white;
-  border: 1px solid #29447e;
-  border-radius: 3px;
+  border-radius: 50%;
+  font-size: 18px;
+  z-index: 200;
+}
+
+.admin-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(0,0,0,.55);
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+}
+
+.admin-box {
+  width: 100%;
+  max-width: 350px;
+  background: white;
+  padding: 18px;
+  border: 1px solid #aaa;
+}
+
+.admin-box h2 {
+  color: #29487d;
+  margin-top: 0;
+}
+
+.admin-box button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 9px;
+  background: #3b5998;
+  border: 1px solid #29487d;
+  color: white;
   font-weight: bold;
-  cursor: pointer;
 }
 
-.close-btn {
+.admin-box button.close {
   background: #eee;
+  border-color: #ccc;
   color: #333;
-  border: 1px solid #ccc;
 }
 
-.reset-description {
-  font-size: 11px;
-  color: #888;
-  line-height: 1.5;
+/* ACTIVE 2015 STYLE CONVERSION */
+
+.fb15-injected {
+  font-family: Helvetica, Arial, sans-serif !important;
+  color: #1d2129;
 }
 
-@media (max-width: 650px) {
-  .container { margin-top: 18px; }
-  .main-card { padding: 19px; }
-  .columns { grid-template-columns: 1fr; gap: 24px; }
-  h1 { font-size: 23px; }
-  .logo { font-size: 28px; }
+.fb15-injected img {
+  max-width: 100%;
+}
+
+#app button:not(.unstyled) {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 850px) {
+  .page {
+    grid-template-columns: 155px minmax(0, 1fr);
+  }
+
+  .right-column { display: none; }
+}
+
+@media (max-width: 600px) {
+  .topbar-inner { gap: 6px; }
+  .header-links { gap: 3px; }
+  .header-links button { font-size: 10px; }
+  .header-links .hide-mobile { display: none; }
+
+  .page {
+    display: block;
+    margin-top: 7px;
+    padding: 0 5px;
+  }
+
+  .left-column { display: none; }
+  .right-column { display: none; }
+  .center-column { width: 100%; }
+
+  .cover-photo { height: 145px; }
+  .profile-picture {
+    width: 105px;
+    height: 105px;
+    bottom: -25px;
+  }
+
+  .cover-title {
+    left: 135px;
+    font-size: 18px;
+  }
+
+  .profile-nav {
+    padding-left: 10px;
+    padding-top: 35px;
+    gap: 12px;
+  }
+
+  .profile-nav button { font-size: 11px; }
+  .people-grid { grid-template-columns: repeat(2, 1fr); }
+  .post-content { font-size: 13px; }
+  .search-box { max-width: none; }
+}
+
+@media (max-width: 360px) {
+  .fb-logo { font-size: 25px; width: 26px; }
+  .header-links button { padding: 4px 2px; }
 }
 </style>
 </head>
 
 <body>
+<div id="app">
 
 <header class="topbar">
   <div class="topbar-inner">
-    <div class="logo">facebook<span>®</span></div>
-    <div class="version">Classic Edition</div>
+    <div class="fb-logo">f</div>
+
+    <form class="search-box" id="searchForm">
+      <input id="searchInput" type="search"
+        placeholder="Search Facebook">
+      <button type="submit">⌕</button>
+    </form>
+
+    <nav class="header-links">
+      <button data-page="profile" class="hide-mobile">Demo User</button>
+      <button data-page="home">Home</button>
+      <button class="header-icon" data-page="friends" title="Friends">♟</button>
+      <button class="header-icon" data-page="messages" title="Messages">✉</button>
+      <button class="header-icon" data-page="notifications" title="Notifications">♧</button>
+      <span class="header-divider"></span>
+      <button class="header-icon" data-page="settings" title="Settings">⚙</button>
+    </nav>
   </div>
 </header>
 
-<main class="container">
-  <section class="main-card">
-    <div class="columns">
+<div class="page">
 
-      <div>
-        <h1>Welcome to Facebook</h1>
+<!-- LEFT SIDEBAR -->
 
-        <p class="intro">
-          Facebook helps you connect and share with the people in your life.
-          Discover what your friends are doing and stay connected wherever you are.
-        </p>
+<aside class="left-column">
 
-        <div class="old-notice">
-          <strong>Welcome back!</strong><br>
-          Enjoy this classic-inspired Facebook landing page.
-          Use the buttons to visit Facebook's official website.
+  <div class="mini-profile" data-page="profile">
+    <img src="https://i.pravatar.cc/80?img=12" alt="Demo profile">
+    <strong>Demo User</strong>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-item active" data-page="home">
+      <span class="sidebar-icon">▦</span> News Feed
+    </div>
+    <div class="sidebar-item" data-page="messages">
+      <span class="sidebar-icon">✉</span> Messages
+    </div>
+    <div class="sidebar-item" data-page="events">
+      <span class="sidebar-icon">▣</span> Events
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-heading">Favorites</div>
+    <div class="sidebar-item" data-page="friends">
+      <span class="sidebar-icon">♟</span> Find Friends
+    </div>
+    <div class="sidebar-item" data-page="photos">
+      <span class="sidebar-icon">▧</span> Photos
+    </div>
+    <div class="sidebar-item" data-page="groups">
+      <span class="sidebar-icon">♧</span> Groups
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-heading">Pages</div>
+    <div class="sidebar-item" data-page="pages">
+      <span class="sidebar-icon">▤</span> Pages
+    </div>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-heading">Create</div>
+    <div class="sidebar-item" data-page="events">Event</div>
+    <div class="sidebar-item" data-page="groups">Group</div>
+    <div class="sidebar-item" data-page="pages">Page</div>
+  </div>
+
+</aside>
+
+<!-- CENTER -->
+
+<main class="center-column">
+
+<!-- HOME -->
+
+<section class="view active" id="view-home">
+
+  <div class="card">
+    <div class="composer-tabs">
+      <span>✎ Create Post</span>
+      <span>▧ Photo/Video</span>
+      <span>☻ Feeling/Activity</span>
+    </div>
+
+    <div class="composer-main">
+      <img class="composer-avatar"
+        src="https://i.pravatar.cc/80?img=12" alt="">
+      <textarea id="postText"
+        placeholder="What's on your mind?"></textarea>
+    </div>
+
+    <div class="composer-bottom">
+      <div class="composer-tools">
+        <span>▧ Photo</span>
+        <span>☻ Feeling</span>
+        <span>📍 Location</span>
+      </div>
+      <button class="primary-btn" id="publishPost">Post</button>
+    </div>
+  </div>
+
+  <div id="feed">
+
+    <article class="post">
+      <div class="post-header">
+        <img class="post-avatar"
+          src="https://i.pravatar.cc/80?img=47" alt="">
+        <div>
+          <a class="post-author" href="#" data-page="profile">Daniel Mensah</a>
+          <span class="post-time">2 hrs · Public 🌐</span>
         </div>
       </div>
-
-      <div class="account-box">
-        <h2>Join Facebook</h2>
-
-        <p class="intro">
-          Connect with friends and family around the world.
-        </p>
-
-        <a class="btn create-btn"
-           href="https://www.facebook.com/reg/"
-           data-external="true">
-          Create New Account
-        </a>
-
-        <hr>
-
-        <p style="font-size:13px; color:#666;">
-          Already have an account?
-        </p>
-
-        <a class="btn login-btn"
-           href="https://www.facebook.com/login/"
-           data-external="true">
-          Log In to Existing Account
-        </a>
+      <div class="post-content">
+        Beautiful afternoon. Sometimes the simple moments are the best.
       </div>
+      <img class="post-photo"
+        src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=900"
+        alt="Sunset landscape">
+      <div class="post-stats">👍 24 people like this · 5 comments</div>
+      <div class="post-actions">
+        <button data-like>👍 Like</button>
+        <button data-comment>💬 Comment</button>
+        <button data-share>↗ Share</button>
+      </div>
+      <div class="comment-area">
+        <input type="text" placeholder="Write a comment...">
+      </div>
+    </article>
 
+    <article class="post">
+      <div class="post-header">
+        <img class="post-avatar"
+          src="https://i.pravatar.cc/80?img=32" alt="">
+        <div>
+          <a class="post-author" href="#" data-page="profile">Akosua Boateng</a>
+          <span class="post-time">Yesterday · Friends</span>
+        </div>
+      </div>
+      <div class="post-content">
+        A little progress every day adds up to big results. Keep going!
+      </div>
+      <div class="post-stats">👍 18 people like this · 3 comments</div>
+      <div class="post-actions">
+        <button data-like>👍 Like</button>
+        <button data-comment>💬 Comment</button>
+        <button data-share>↗ Share</button>
+      </div>
+      <div class="comment-area">
+        <input type="text" placeholder="Write a comment...">
+      </div>
+    </article>
+
+    <article class="post">
+      <div class="post-header">
+        <img class="post-avatar"
+          src="https://i.pravatar.cc/80?img=11" alt="">
+        <div>
+          <a class="post-author" href="#" data-page="profile">Michael Owusu</a>
+          <span class="post-time">2 days · Public 🌐</span>
+        </div>
+      </div>
+      <div class="post-content">
+        Learning something new every day. What are you studying today?
+      </div>
+      <div class="post-stats">👍 9 people like this · 2 comments</div>
+      <div class="post-actions">
+        <button data-like>👍 Like</button>
+        <button data-comment>💬 Comment</button>
+        <button data-share>↗ Share</button>
+      </div>
+      <div class="comment-area">
+        <input type="text" placeholder="Write a comment...">
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- PROFILE -->
+
+<section class="view" id="view-profile">
+  <div class="card">
+    <div class="cover-photo">
+      <img class="profile-picture"
+        src="https://i.pravatar.cc/300?img=12" alt="Demo User">
+      <div class="cover-title">Demo User</div>
     </div>
-  </section>
-</main>
+    <div class="profile-nav">
+      <button data-page="timeline">Timeline</button>
+      <button data-page="about">About</button>
+      <button data-page="friends">Friends</button>
+      <button data-page="photos">Photos</button>
+      <button data-page="more">More ▾</button>
+    </div>
+  </div>
 
-<footer class="footer">
-  <strong>Facebook Classic Edition</strong><br>
-  This is an independent fan-made landing page and is not affiliated
-  with or endorsed by Meta or Facebook.
-  <hr>
+  <div class="card">
+    <div class="card-header">Intro</div>
+    <div class="card-body">
+      <strong>Demo User</strong>
+      <p>Welcome to my profile!</p>
+      <p class="muted">This is a fictional demonstration profile.</p>
+      <button class="primary-btn" data-page="about">View About</button>
+    </div>
+  </div>
 
-  <a href="https://www.facebook.com/policies/"
-     data-external="true">Terms</a>
-  &nbsp; · &nbsp;
-  <a href="https://www.facebook.com/privacy/policy/"
-     data-external="true">Privacy</a>
+  <div class="card">
+    <div class="card-header">Recent Activity</div>
+    <div class="card-body">
+      <p>Welcome to the classic Facebook-style profile.</p>
+      <p class="muted">Demo content only.</p>
+    </div>
+  </div>
+</section>
 
-  <br>© 2026 Classic Edition
+<!-- FRIENDS -->
+
+<section class="view" id="view-friends">
+  <h2 class="section-title">Find Friends</h2>
+  <div class="card">
+    <div class="card-header">People You May Know</div>
+    <div class="card-body">
+      <div class="people-grid">
+        <div class="person-card">
+          <img src="https://i.pravatar.cc/200?img=47" alt="">
+          <strong>Daniel Mensah</strong>
+          <button data-friend>+ Add Friend</button>
+        </div>
+        <div class="person-card">
+          <img src="https://i.pravatar.cc/200?img=32" alt="">
+          <strong>Akosua Boateng</strong>
+          <button data-friend>+ Add Friend</button>
+        </div>
+        <div class="person-card">
+          <img src="https://i.pravatar.cc/200?img=11" alt="">
+          <strong>Michael Owusu</strong>
+          <button data-friend>+ Add Friend</button>
+        </div>
+        <div class="person-card">
+          <img src="https://i.pravatar.cc/200?img=13" alt="">
+          <strong>Kwame Asare</strong>
+          <button data-friend>+ Add Friend</button>
+        </div>
+        <div class="person-card">
+          <img src="https://i.pravatar.cc/200?img=44" alt="">
+          <strong>Abena Osei</strong>
+          <button data-friend>+ Add Friend</button>
+        </div>
+        <div class="person-card">
+          <img src="https://i.pravatar.cc/200?img=59" alt="">
+          <strong>Yaw Appiah</strong>
+          <button data-friend>+ Add Friend</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MESSAGES -->
+
+<section class="view" id="view-messages">
+  <h2 class="section-title">Messages</h2>
+  <div class="card">
+    <div class="card-header">Inbox</div>
+
+    <div class="message-row">
+      <img src="https://i.pravatar.cc/80?img=47" alt="">
+      <div>
+        <strong>Daniel Mensah</strong>
+        <p>Hey! How are you doing?</p>
+      </div>
+    </div>
+
+    <div class="message-row">
+      <img src="https://i.pravatar.cc/80?img=32" alt="">
+      <div>
+        <strong>Akosua Boateng</strong>
+        <p>Did you finish the assignment?</p>
+      </div>
+    </div>
+
+    <div class="message-row">
+      <img src="https://i.pravatar.cc/80?img=11" alt="">
+      <div>
+        <strong>Michael Owusu</strong>
+        <p>See you tomorrow!</p>
+      </div>
+    </div>
+
+    <div class="card-body muted">
+      These are sample conversations, not real messages.
+    </div>
+  </div>
+</section>
+
+<!-- NOTIFICATIONS -->
+
+<section class="view" id="view-notifications">
+  <h2 class="section-title">Notifications</h2>
+  <div class="card">
+    <div class="notification">
+      <img src="https://i.pravatar.cc/80?img=47" alt="">
+      <div><strong>Daniel Mensah</strong> liked a sample post.
+        <div class="muted">2 hours ago</div>
+      </div>
+    </div>
+    <div class="notification">
+      <img src="https://i.pravatar.cc/80?img=32" alt="">
+      <div><strong>Akosua Boateng</strong> posted a new update.
+        <div class="muted">Yesterday</div>
+      </div>
+    </div>
+    <div class="notification">
+      <img src="https://i.pravatar.cc/80?img=11" alt="">
+      <div><strong>Michael Owusu</strong> shared a photo.
+        <div class="muted">2 days ago</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTOS -->
+
+<section class="view" id="view-photos">
+  <h2 class="section-title">Photos</h2>
+  <div class="card">
+    <div class="card-header">Recent Photos</div>
+    <div class="card-body">
+      <div class="photo-grid">
+        <img src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=400" alt="">
+        <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400" alt="">
+        <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=400" alt="">
+        <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400" alt="">
+        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400" alt="">
+        <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=400" alt="">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GROUPS -->
+
+<section class="view" id="view-groups">
+  <h2 class="section-title">Groups</h2>
+  <div class="card">
+    <div class="card-header">Discover Groups</div>
+    <div class="group-row">
+      <strong>Students and Learning</strong>
+      <p>Discuss school, education and learning.</p>
+      <button class="primary-btn" data-join>Join Group</button>
+    </div>
+    <div class="group-row">
+      <strong>Technology Community</strong>
+      <p>Talk about technology and innovation.</p>
+      <button class="primary-btn" data-join>Join Group</button>
+    </div>
+    <div class="group-row">
+      <strong>Photography Lovers</strong>
+      <p>Share photography and creative ideas.</p>
+      <button class="primary-btn" data-join>Join Group</button>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+
+<section class="view" id="view-events">
+  <h2 class="section-title">Events</h2>
+  <div class="card">
+    <div class="card-header">Upcoming Events</div>
+    <div class="group-row">
+      <strong>Community Learning Day</strong>
+      <p>Sample event · Saturday</p>
+      <button class="primary-btn" data-join>Interested</button>
+    </div>
+    <div class="group-row">
+      <strong>Technology Discussion</strong>
+      <p>Sample event · Next week</p>
+      <button class="primary-btn" data-join>Interested</button>
+    </div>
+  </div>
+</section>
+
+<!-- PAGES -->
+
+<section class="view" id="view-pages">
+  <h2 class="section-title">Pages</h2>
+  <div class="card">
+    <div class="card-body">
+      <h3>Discover Pages</h3>
+      <p>Explore sample pages and communities.</p>
+      <p class="muted">Page discovery is simulated in this demonstration.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+
+<section class="view" id="view-about">
+  <h2 class="section-title">About</h2>
+  <div class="card">
+    <div class="card-header">About Demo User</div>
+    <div class="card-body">
+      <p><strong>Work and Education</strong></p>
+      <p>Sample information</p>
+      <hr>
+      <p><strong>Places Lived</strong></p>
+      <p>Not specified</p>
+      <hr>
+      <p><strong>Contact Information</strong></p>
+      <p>Not specified</p>
+    </div>
+  </div>
+</section>
+
+<!-- SETTINGS -->
+
+<section class="view" id="view-settings">
+  <h2 class="section-title">Settings</h2>
+  <div class="card">
+    <div class="card-header">General Settings</div>
+    <div class="card-body">
+      <p>This is a local demonstration.</p>
+      <p>It does not manage your actual Facebook account.</p>
+      <button class="primary-btn" id="localReset">Reset Demo Data</button>
+    </div>
+  </div>
+</section>
+
+<!-- EXTRA PAGES -->
+
+<section class="view" id="view-timeline">
+  <h2 class="section-title">Timeline</h2>
+  <div class="card">
+    <div class="card-body">Your sample timeline is shown on the Home page.</div>
+  </div>
+</section>
+
+<section class="view" id="view-more">
+  <h2 class="section-title">More</h2>
+  <div class="card">
+    <div class="card-body">
+      <button class="primary-btn" data-page="groups">Groups</button>
+      <button class="primary-btn" data-page="events">Events</button>
+      <button class="primary-btn" data-page="photos">Photos</button>
+    </div>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <a href="#" data-page="about">About</a>
+  <a href="#" data-page="settings">Settings</a>
+  <a href="https://www.facebook.com/"
+     target="_blank" rel="noopener noreferrer">Official Facebook</a>
+  <br>
+  Facebook 2015-inspired demonstration.
+  Not affiliated with Meta or Facebook.
+  All profiles, posts, friends and messages here are fictional sample content.
 </footer>
 
-<button class="admin-trigger" id="adminTrigger"
-        aria-label="Admin settings">⚙</button>
+</main>
 
-<div class="admin-panel" id="adminPanel">
-  <div class="admin-card">
+<!-- RIGHT SIDEBAR -->
 
-    <div class="admin-heading">
-      <h2>Admin Settings</h2>
-      <button class="top-reset" id="topReset">
-        Reset Everything
-      </button>
+<aside class="right-column">
+
+  <div class="right-card">
+    <div class="right-heading">People You May Know</div>
+    <div class="right-content">
+      <div class="friend-row">
+        <img src="https://i.pravatar.cc/80?img=47" alt="">
+        <div>
+          <strong>Daniel Mensah</strong>
+          <small>2 mutual friends</small>
+        </div>
+      </div>
+      <div class="friend-row">
+        <img src="https://i.pravatar.cc/80?img=32" alt="">
+        <div>
+          <strong>Akosua Boateng</strong>
+          <small>5 mutual friends</small>
+        </div>
+      </div>
+      <div class="friend-row">
+        <img src="https://i.pravatar.cc/80?img=11" alt="">
+        <div>
+          <strong>Michael Owusu</strong>
+          <small>1 mutual friend</small>
+        </div>
+      </div>
+      <a href="#" data-page="friends">See more</a>
     </div>
+  </div>
 
-    <p style="font-size:13px;color:#666;line-height:1.6;">
-      Manage locally stored data for this Mini App.
+  <div class="right-card">
+    <div class="right-heading">Trending</div>
+    <div class="right-content">
+      <p><a href="#">Technology</a></p>
+      <p><a href="#">Education</a></p>
+      <p><a href="#">Sports</a></p>
+      <p><a href="#">Entertainment</a></p>
+    </div>
+  </div>
+
+  <div class="right-card">
+    <div class="right-heading">Sponsored</div>
+    <div class="right-content">
+      <div class="sponsored">Sponsored</div>
+      <strong>Discover something new</strong>
+      <p class="muted">Sample advertisement area.</p>
+    </div>
+  </div>
+
+</aside>
+
+</div>
+
+<button class="admin-trigger" id="adminTrigger"
+  aria-label="Admin settings">⚙</button>
+
+<div class="admin-overlay" id="adminOverlay">
+  <div class="admin-box">
+    <h2>Admin Settings</h2>
+    <p>Manage this browser's local demonstration data.</p>
+    <button id="resetEverything">Reset Demo Data</button>
+    <button class="close" id="closeAdmin">Close</button>
+    <p class="muted">
+      This panel is not secure authentication. It must not be used
+      for protecting sensitive information.
     </p>
-
-    <button class="admin-action" id="resetData">
-      Clear App Data
-    </button>
-
-    <button class="admin-action close-btn" id="closeAdmin">
-      Close Panel
-    </button>
-
-    <p class="reset-description">
-      Reset clears Cache Storage and IndexedDB databases for this
-      origin, as well as this app's prefixed local and session storage.
-      It cannot delete remote accounts, server data, or GitHub files.
-    </p>
-
   </div>
 </div>
 
+</div>
+
 <script>
+/* TELEGRAM MINI APP */
+
 const tg = window.Telegram?.WebApp;
 
 if (tg) {
   tg.ready();
   tg.expand();
-  tg.setHeaderColor("#3b5998");
-  tg.setBackgroundColor("#edf0f5");
+
+  try {
+    tg.setHeaderColor("#3b5998");
+    tg.setBackgroundColor("#e9ebee");
+  } catch (e) {}
 }
 
-// Replace with your own numeric Telegram ID.
+/* DEMO STORAGE */
+
+const STORAGE_PREFIX = "fbclassic2015_";
+
+function saveDemo(key, value) {
+  try {
+    localStorage.setItem(
+      STORAGE_PREFIX + key,
+      JSON.stringify(value)
+    );
+  } catch (e) {}
+}
+
+function readDemo(key, fallback) {
+  try {
+    const value = localStorage.getItem(STORAGE_PREFIX + key);
+    return value ? JSON.parse(value) : fallback;
+  } catch (e) {
+    return fallback;
+  }
+}
+
+/* PAGE NAVIGATION */
+
+function showPage(page) {
+  const target = document.getElementById("view-" + page);
+
+  if (!target) return;
+
+  document.querySelectorAll(".view").forEach(view => {
+    view.classList.remove("active");
+  });
+
+  target.classList.add("active");
+
+  document.querySelectorAll("[data-page]").forEach(item => {
+    item.classList.toggle(
+      "active",
+      item.dataset.page === page
+    );
+  });
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+document.addEventListener("click", event => {
+  const pageButton = event.target.closest("[data-page]");
+
+  if (pageButton) {
+    event.preventDefault();
+    showPage(pageButton.dataset.page);
+  }
+});
+
+/* SEARCH */
+
+document.getElementById("searchForm").addEventListener(
+  "submit",
+  event => {
+    event.preventDefault();
+
+    const query = document.getElementById("searchInput")
+      .value.trim();
+
+    if (!query) return;
+
+    alert(
+      "Search demonstration\n\nYou searched for: " +
+      query +
+      "\n\nThis demo does not search real Facebook accounts."
+    );
+  }
+);
+
+/* CREATE POSTS */
+
+const feed = document.getElementById("feed");
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[char]);
+}
+
+function addPost(text) {
+  const safeText = escapeHTML(text);
+
+  const article = document.createElement("article");
+  article.className = "post fb15-injected";
+
+  article.innerHTML = `
+    <div class="post-header">
+      <img class="post-avatar"
+        src="https://i.pravatar.cc/80?img=12" alt="">
+      <div>
+        <a class="post-author" href="#" data-page="profile">
+          Demo User
+        </a>
+        <span class="post-time">Just now · Public 🌐</span>
+      </div>
+    </div>
+    <div class="post-content">${safeText}</div>
+    <div class="post-stats">0 likes · 0 comments</div>
+    <div class="post-actions">
+      <button data-like>👍 Like</button>
+      <button data-comment>💬 Comment</button>
+      <button data-share>↗ Share</button>
+    </div>
+    <div class="comment-area">
+      <input type="text" placeholder="Write a comment...">
+    </div>
+  `;
+
+  feed.prepend(article);
+
+  const posts = readDemo("posts", []);
+  posts.unshift(text);
+  saveDemo("posts", posts);
+
+  apply2015Style(article);
+}
+
+document.getElementById("publishPost").addEventListener(
+  "click",
+  () => {
+    const input = document.getElementById("postText");
+    const text = input.value.trim();
+
+    if (!text) {
+      alert("Write something before posting.");
+      return;
+    }
+
+    addPost(text);
+    input.value = "";
+  }
+);
+
+/* POST INTERACTIONS */
+
+document.addEventListener("click", event => {
+  const like = event.target.closest("[data-like]");
+
+  if (like) {
+    const post = like.closest(".post");
+    const stats = post.querySelector(".post-stats");
+    const liked = like.classList.toggle("liked");
+
+    like.textContent = liked ? "👍 Liked" : "👍 Like";
+
+    const current = Number(
+      stats.dataset.likes || "0"
+    );
+
+    const next = Math.max(0, current + (liked ? 1 : -1));
+
+    stats.dataset.likes = next;
+
+    stats.textContent = next +
+      " likes · Sample comments";
+
+    return;
+  }
+
+  const comment = event.target.closest("[data-comment]");
+
+  if (comment) {
+    const input = comment.closest(".post")
+      .querySelector(".comment-area input");
+
+    input.focus();
+    return;
+  }
+
+  const share = event.target.closest("[data-share]");
+
+  if (share) {
+    alert("Sharing is simulated in this demonstration.");
+    return;
+  }
+
+  const friend = event.target.closest("[data-friend]");
+
+  if (friend) {
+    friend.textContent = "Request Sent";
+    friend.disabled = true;
+    return;
+  }
+
+  const join = event.target.closest("[data-join]");
+
+  if (join) {
+    join.textContent = "Joined / Interested";
+    join.disabled = true;
+  }
+});
+
+/* DEMO COMMENTS */
+
+document.addEventListener("keydown", event => {
+  if (
+    event.target.matches(".comment-area input") &&
+    event.key === "Enter"
+  ) {
+    const value = event.target.value.trim();
+
+    if (!value) return;
+
+    const comment = document.createElement("div");
+    comment.className = "fb15-injected";
+    comment.style.padding = "7px 0";
+    comment.style.fontSize = "12px";
+    comment.textContent = "Demo User: " + value;
+
+    event.target.closest(".post")
+      .querySelector(".comment-area")
+      .prepend(comment);
+
+    event.target.value = "";
+  }
+});
+
+/* ACTIVE 2015 STYLE CONVERSION ENGINE */
+
+/*
+  This observes newly added elements and applies the
+  classic Facebook 2015 class to injected content.
+
+  The site's own styles are scoped through #app and
+  remain consistent when sections are updated.
+*/
+
+function apply2015Style(element) {
+  if (!element || element.nodeType !== 1) return;
+
+  element.classList.add("fb15-injected");
+  element.setAttribute("data-fb15-style", "applied");
+
+  element.querySelectorAll("*").forEach(child => {
+    child.classList.add("fb15-injected");
+    child.setAttribute("data-fb15-style", "applied");
+  });
+}
+
+const styleObserver = new MutationObserver(records => {
+  for (const record of records) {
+    for (const node of record.addedNodes) {
+      if (node.nodeType === 1) {
+        apply2015Style(node);
+      }
+    }
+  }
+});
+
+styleObserver.observe(document.getElementById("app"), {
+  childList: true,
+  subtree: true
+});
+
+/* APPLY TO EXISTING CONTENT */
+
+apply2015Style(document.getElementById("app"));
+
+/* RESTORE LOCAL DEMO POSTS */
+
+const savedPosts = readDemo("posts", []);
+
+savedPosts.slice().reverse().forEach(text => {
+  const safeText = escapeHTML(text);
+
+  const article = document.createElement("article");
+  article.className = "post fb15-injected";
+
+  article.innerHTML = `
+    <div class="post-header">
+      <img class="post-avatar"
+        src="https://i.pravatar.cc/80?img=12" alt="">
+      <div>
+        <a class="post-author" href="#" data-page="profile">
+          Demo User
+        </a>
+        <span class="post-time">Saved demo post</span>
+      </div>
+    </div>
+    <div class="post-content">${safeText}</div>
+    <div class="post-stats">0 likes · 0 comments</div>
+    <div class="post-actions">
+      <button data-like>👍 Like</button>
+      <button data-comment>💬 Comment</button>
+      <button data-share>↗ Share</button>
+    </div>
+    <div class="comment-area">
+      <input type="text" placeholder="Write a comment...">
+    </div>
+  `;
+
+  feed.prepend(article);
+});
+
+/* ADMIN PANEL */
+
 const ADMIN_TELEGRAM_ID = "YOUR_TELEGRAM_ID";
 
-const userId = tg?.initDataUnsafe?.user?.id?.toString();
+const currentUserId = tg?.initDataUnsafe?.user?.id?.toString();
 
 const adminTrigger = document.getElementById("adminTrigger");
-const adminPanel = document.getElementById("adminPanel");
+const adminOverlay = document.getElementById("adminOverlay");
 
-if (userId && userId === ADMIN_TELEGRAM_ID) {
+if (
+  currentUserId &&
+  ADMIN_TELEGRAM_ID !== "YOUR_TELEGRAM_ID" &&
+  currentUserId === ADMIN_TELEGRAM_ID
+) {
   adminTrigger.style.display = "block";
 }
 
 adminTrigger.addEventListener("click", () => {
-  adminPanel.style.display = "flex";
+  adminOverlay.style.display = "flex";
 });
 
-document.getElementById("closeAdmin").addEventListener("click", () => {
-  adminPanel.style.display = "none";
-});
+document.getElementById("closeAdmin").addEventListener(
+  "click",
+  () => {
+    adminOverlay.style.display = "none";
+  }
+);
 
-adminPanel.addEventListener("click", event => {
-  if (event.target === adminPanel) {
-    adminPanel.style.display = "none";
+adminOverlay.addEventListener("click", event => {
+  if (event.target === adminOverlay) {
+    adminOverlay.style.display = "none";
   }
 });
 
-async function fullReset() {
+/* SAFE LOCAL DEMO RESET */
+
+function resetDemo() {
   const confirmed = confirm(
-    "RESET EVERYTHING?\n\nThis will clear locally stored app data, all Cache Storage entries and all IndexedDB databases for this website origin. This cannot be undone."
+    "Clear this Facebook Classic demonstration's saved posts and settings?"
   );
 
   if (!confirmed) return;
 
-  const prefix = "fbclassic_";
-
-  try {
-    // Clear matching local storage.
-    for (const key of Object.keys(localStorage)) {
-      if (key.startsWith(prefix)) {
-        localStorage.removeItem(key);
-      }
-    }
-
-    // Clear matching session storage.
-    for (const key of Object.keys(sessionStorage)) {
-      if (key.startsWith(prefix)) {
-        sessionStorage.removeItem(key);
-      }
-    }
-
-    // Clear Cache Storage for this origin.
-    if ("caches" in window) {
-      const cacheNames = await caches.keys();
-      await Promise.all(
-        cacheNames.map(name => caches.delete(name))
-      );
-    }
-
-    // Delete IndexedDB databases for this origin.
-    if (indexedDB.databases) {
-      const databases = await indexedDB.databases();
-
-      await Promise.all(
-        databases
-          .filter(db => db.name)
-          .map(db => new Promise(resolve => {
-            const request = indexedDB.deleteDatabase(db.name);
-            request.onsuccess = resolve;
-            request.onerror = resolve;
-            request.onblocked = resolve;
-          }))
-      );
-    }
-
-    alert("Local reset process completed.");
-    location.reload();
-
-  } catch (error) {
-    alert("Some local data could not be cleared. Try again.");
-    console.error("Reset error:", error);
-  }
-}
-
-document.getElementById("topReset")
-  .addEventListener("click", fullReset);
-
-document.getElementById("resetData")
-  .addEventListener("click", fullReset);
-
-// Open official Facebook pages through Telegram.
-document.querySelectorAll("[data-external='true']").forEach(link => {
-  link.addEventListener("click", event => {
-    if (tg) {
-      event.preventDefault();
-      tg.openLink(link.href);
+  Object.keys(localStorage).forEach(key => {
+    if (key.startsWith(STORAGE_PREFIX)) {
+      localStorage.removeItem(key);
     }
   });
-});
+
+  location.reload();
+}
+
+document.getElementById("resetEverything")
+  .addEventListener("click", resetDemo);
+
+document.getElementById("localReset")
+  .addEventListener("click", resetDemo);
+
+/* INITIAL PAGE */
+
+showPage("home");
 </script>
 
 </body>
