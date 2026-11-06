@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#3b5998">
+<title>Facebook Classic</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+:root {
+  --blue: #3b5998;
+  --dark-blue: #29447e;
+  --border: #c3cfe0;
+  --text: #333;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #edf0f5;
+  color: var(--text);
+}
+
+.topbar {
+  background: linear-gradient(#627aad, #3b5998);
+  border-bottom: 1px solid #243d70;
+  color: white;
+  padding: 13px 16px;
+  box-shadow: 0 1px 3px #777;
+}
+
+.topbar-inner {
+  max-width: 980px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 31px;
+  font-weight: bold;
+  letter-spacing: -1.8px;
+  color: white;
+}
+
+.logo span {
+  font-size: 12px;
+  letter-spacing: 0;
+  vertical-align: top;
+}
+
+.version {
+  font-size: 11px;
+  color: #e4e9f2;
+}
+
+.container {
+  max-width: 960px;
+  margin: 32px auto;
+  padding: 0 15px;
+}
+
+.main-card {
+  background: white;
+  border: 1px solid #ccd4e0;
+  border-radius: 3px;
+  padding: 28px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap: 35px;
+}
+
+h1 {
+  color: #203b70;
+  font-size: 26px;
+  margin: 4px 0 12px;
+}
+
+h2 {
+  color: #333;
+  font-size: 19px;
+  margin-top: 0;
+}
+
+.intro {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #555;
+}
+
+.old-notice {
+  margin-top: 24px;
+  padding: 13px;
+  background: #f7f9fc;
+  border: 1px solid #d8dfea;
+  color: #555;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.account-box {
+  background: #f7f9fc;
+  border: 1px solid #d8dfea;
+  padding: 20px;
+  border-radius: 3px;
+}
+
+.account-box h2 {
+  color: #203b70;
+  border-bottom: 1px solid #d8dfea;
+  padding-bottom: 12px;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 12px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: bold;
+  margin-top: 12px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.create-btn {
+  background: linear-gradient(#6e9b45, #56802e);
+  border-color: #3b6e22;
+  color: white;
+}
+
+.create-btn:hover { background: #4d762b; }
+
+.login-btn {
+  background: linear-gradient(#6d87b5, #3b5998);
+  border-color: #29447e;
+  color: white;
+}
+
+.login-btn:hover { background: #29447e; }
+
+hr {
+  border: 0;
+  border-top: 1px solid #d8dfea;
+  margin: 20px 0;
+}
+
+.footer {
+  max-width: 960px;
+  margin: 18px auto 30px;
+  padding: 0 15px;
+  color: #777;
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.footer a {
+  color: #3b5998;
+  text-decoration: none;
+}
+
+.admin-trigger {
+  position: fixed;
+  right: 13px;
+  bottom: 13px;
+  border: 1px solid #29447e;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  background: #3b5998;
+  color: white;
+  font-size: 19px;
+  cursor: pointer;
+  box-shadow: 0 2px 7px #888;
+  display: none;
+}
+
+.admin-panel {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: rgba(0,0,0,.55);
+  padding: 18px;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-card {
+  background: white;
+  border: 1px solid #9baac4;
+  border-radius: 4px;
+  padding: 20px;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 4px 20px #333;
+}
+
+.admin-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #d8dfea;
+  padding-bottom: 12px;
+}
+
+.admin-heading h2 {
+  margin: 0;
+  color: #29447e;
+}
+
+.top-reset {
+  background: #a83232;
+  color: white;
+  border: 1px solid #812222;
+  border-radius: 3px;
+  padding: 7px 10px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.admin-action {
+  width: 100%;
+  padding: 11px;
+  margin-top: 12px;
+  background: #3b5998;
+  color: white;
+  border: 1px solid #29447e;
+  border-radius: 3px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-btn {
+  background: #eee;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.reset-description {
+  font-size: 11px;
+  color: #888;
+  line-height: 1.5;
+}
+
+@media (max-width: 650px) {
+  .container { margin-top: 18px; }
+  .main-card { padding: 19px; }
+  .columns { grid-template-columns: 1fr; gap: 24px; }
+  h1 { font-size: 23px; }
+  .logo { font-size: 28px; }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="logo">facebook<span>®</span></div>
+    <div class="version">Classic Edition</div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="main-card">
+    <div class="columns">
+
+      <div>
+        <h1>Welcome to Facebook</h1>
+
+        <p class="intro">
+          Facebook helps you connect and share with the people in your life.
+          Discover what your friends are doing and stay connected wherever you are.
+        </p>
+
+        <div class="old-notice">
+          <strong>Welcome back!</strong><br>
+          Enjoy this classic-inspired Facebook landing page.
+          Use the buttons to visit Facebook's official website.
+        </div>
+      </div>
+
+      <div class="account-box">
+        <h2>Join Facebook</h2>
+
+        <p class="intro">
+          Connect with friends and family around the world.
+        </p>
+
+        <a class="btn create-btn"
+           href="https://www.facebook.com/reg/"
+           data-external="true">
+          Create New Account
+        </a>
+
+        <hr>
+
+        <p style="font-size:13px; color:#666;">
+          Already have an account?
+        </p>
+
+        <a class="btn login-btn"
+           href="https://www.facebook.com/login/"
+           data-external="true">
+          Log In to Existing Account
+        </a>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <strong>Facebook Classic Edition</strong><br>
+  This is an independent fan-made landing page and is not affiliated
+  with or endorsed by Meta or Facebook.
+  <hr>
+
+  <a href="https://www.facebook.com/policies/"
+     data-external="true">Terms</a>
+  &nbsp; · &nbsp;
+  <a href="https://www.facebook.com/privacy/policy/"
+     data-external="true">Privacy</a>
+
+  <br>© 2026 Classic Edition
+</footer>
+
+<button class="admin-trigger" id="adminTrigger"
+        aria-label="Admin settings">⚙</button>
+
+<div class="admin-panel" id="adminPanel">
+  <div class="admin-card">
+
+    <div class="admin-heading">
+      <h2>Admin Settings</h2>
+      <button class="top-reset" id="topReset">
+        Reset Everything
+      </button>
+    </div>
+
+    <p style="font-size:13px;color:#666;line-height:1.6;">
+      Manage locally stored data for this Mini App.
+    </p>
+
+    <button class="admin-action" id="resetData">
+      Clear App Data
+    </button>
+
+    <button class="admin-action close-btn" id="closeAdmin">
+      Close Panel
+    </button>
+
+    <p class="reset-description">
+      Reset clears Cache Storage and IndexedDB databases for this
+      origin, as well as this app's prefixed local and session storage.
+      It cannot delete remote accounts, server data, or GitHub files.
+    </p>
+
+  </div>
+</div>
+
+<script>
+const tg = window.Telegram?.WebApp;
+
+if (tg) {
+  tg.ready();
+  tg.expand();
+  tg.setHeaderColor("#3b5998");
+  tg.setBackgroundColor("#edf0f5");
+}
+
+// Replace with your own numeric Telegram ID.
+const ADMIN_TELEGRAM_ID = "YOUR_TELEGRAM_ID";
+
+const userId = tg?.initDataUnsafe?.user?.id?.toString();
+
+const adminTrigger = document.getElementById("adminTrigger");
+const adminPanel = document.getElementById("adminPanel");
+
+if (userId && userId === ADMIN_TELEGRAM_ID) {
+  adminTrigger.style.display = "block";
+}
+
+adminTrigger.addEventListener("click", () => {
+  adminPanel.style.display = "flex";
+});
+
+document.getElementById("closeAdmin").addEventListener("click", () => {
+  adminPanel.style.display = "none";
+});
+
+adminPanel.addEventListener("click", event => {
+  if (event.target === adminPanel) {
+    adminPanel.style.display = "none";
+  }
+});
+
+async function fullReset() {
+  const confirmed = confirm(
+    "RESET EVERYTHING?\n\nThis will clear locally stored app data, all Cache Storage entries and all IndexedDB databases for this website origin. This cannot be undone."
+  );
+
+  if (!confirmed) return;
+
+  const prefix = "fbclassic_";
+
+  try {
+    // Clear matching local storage.
+    for (const key of Object.keys(localStorage)) {
+      if (key.startsWith(prefix)) {
+        localStorage.removeItem(key);
+      }
+    }
+
+    // Clear matching session storage.
+    for (const key of Object.keys(sessionStorage)) {
+      if (key.startsWith(prefix)) {
+        sessionStorage.removeItem(key);
+      }
+    }
+
+    // Clear Cache Storage for this origin.
+    if ("caches" in window) {
+      const cacheNames = await caches.keys();
+      await Promise.all(
+        cacheNames.map(name => caches.delete(name))
+      );
+    }
+
+    // Delete IndexedDB databases for this origin.
+    if (indexedDB.databases) {
+      const databases = await indexedDB.databases();
+
+      await Promise.all(
+        databases
+          .filter(db => db.name)
+          .map(db => new Promise(resolve => {
+            const request = indexedDB.deleteDatabase(db.name);
+            request.onsuccess = resolve;
+            request.onerror = resolve;
+            request.onblocked = resolve;
+          }))
+      );
+    }
+
+    alert("Local reset process completed.");
+    location.reload();
+
+  } catch (error) {
+    alert("Some local data could not be cleared. Try again.");
+    console.error("Reset error:", error);
+  }
+}
+
+document.getElementById("topReset")
+  .addEventListener("click", fullReset);
+
+document.getElementById("resetData")
+  .addEventListener("click", fullReset);
+
+// Open official Facebook pages through Telegram.
+document.querySelectorAll("[data-external='true']").forEach(link => {
+  link.addEventListener("click", event => {
+    if (tg) {
+      event.preventDefault();
+      tg.openLink(link.href);
+    }
+  });
+});
+</script>
+
+</body>
+</html>
